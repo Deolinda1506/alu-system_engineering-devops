@@ -1,3 +1,19 @@
-#!/usr/bin/env bash
-#cREATE SSH KEY PAIR
-ssh-keygen -f school -b 4096 -N betty
+#!/bin/bash
+
+# Name of the private key
+PRIVATE_KEY="school"
+
+# Number of bits in the key
+BITS=4096
+
+# Passphrase to protect the key
+PASSPHRASE="betty"
+
+# Generate the key pair
+ssh-keygen -t rsa -b $BITS -f $PRIVATE_KEY -N $PASSPHRASE
+
+# Print success message
+echo "Generating public/private rsa key pair."
+echo "Your identification has been saved in $PRIVATE_KEY."
+echo "Your public key has been saved in ${PRIVATE_KEY}.pub."
+
