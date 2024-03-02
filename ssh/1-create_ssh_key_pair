@@ -20,3 +20,4 @@ else
     echo "$PRIVATE_KEY: Unexpected file format or not found"
 fi
 
+
