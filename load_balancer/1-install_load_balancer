@@ -1,16 +1,28 @@
 #!/usr/bin/env bash
+ HEAD
 #Bash script that installs HAProxy & makes configurations
+
+# bash script that installs HAProxy & makes configurations to meet the following requirements: e22c912 (fine)
 
 apt-get -y install software-properties-common
 add-apt-repository ppa:vbernat/haproxy-1.8
 apt-get update
 apt-get -y install haproxy
 echo "ENABLED=1" >> /etc/default/haproxy
+ HEAD
 printf %s "listen 6034-webs
     bind *:80
     mode http
     balance roundrobin
     server 5953-web-01 18.234.196.13 check
     server 5953-web-02 54.242.126.53 check
+
+printf %s "listen 5517-web
+    bind *:80
+    mode http
+    balance roundrobin
+    server 5968-web-01 54.85.1.232 check
+    server 5968-web-02 54.146.238.253 check
+ e22c912 (fine)
 " >> /etc/haproxy/haproxy.cfg
 sudo service haproxy restart
