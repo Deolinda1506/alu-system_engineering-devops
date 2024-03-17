@@ -1,32 +1,40 @@
 #!/usr/bin/env bash
-# Configures a new ubuntu machine by installing
-# Nginx where it should be listening on port 80
-# Serve a page that would return a Hello World string
-#
 
+# Update package lists and install Nginx
 echo -e "Updating and installing Nginx.\n"
 sudo apt-get update -y -qq && \
-	 sudo apt-get install nginx -y
+sudo apt-get install nginx -y
 
-echo -e "\nSetting up some minor stuff.\n"
-
-# starting nginx service
+# Start nginx service
 sudo service nginx start
 
-# allowing nginx on firewall
+# Allow Nginx through the firewall
 sudo ufw allow 'Nginx HTTP'
 
-# Give the user ownership to website files for easy editing
+# Give the user ownership of website files for easy editing
 sudo chown -R "$USER":"$USER" /var/www/html
 sudo chmod -R 755 /var/www
 
 # Backup default index
-cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bckp
+sudo mv /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bak
 
-# Creating new index
-echo -e "Hello World!" | dd status=none of=/var/www/html/index.nginx-debian.html
+# Create a new index page with "Holberton School"
+echo "<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to Holberton School</title>
+</head>
+<body>
+<h1>Holberton School</h1>
+</body>
+</html>" | sudo tee /var/www/html/index.html >/dev/null
 
-# Restarting nginx
+# Restart nginx
 sudo service nginx restart
 
-echo -e "\nCompleted. ✅\n"
+# Check if Nginx returns a page containing "Holberton School" at its root
+if curl -s localhost | grep -q "Holberton School"; then
+    echo -e "\nNginx returns a page containing 'Holberton School' at its root.\n"
+else
+    echo -e "\nNginx does not return a page containing 'Holberton School' at its root.\n"
+fi
