@@ -1,32 +1,32 @@
 #!/usr/bin/env bash
-# Update package lists and install Nginx
+# Configures a new ubuntu machine by installing
+# Nginx where it should be listening on port 80
+# Serve a page that would return a Hello World string
+#
+
 echo -e "Updating and installing Nginx.\n"
 sudo apt-get update -y -qq && \
-sudo apt-get install nginx -y
+	 sudo apt-get install nginx -y
 
-# Start nginx service
+echo -e "\nSetting up some minor stuff.\n"
+
+# starting nginx service
 sudo service nginx start
 
-# Allow Nginx through the firewall
+# allowing nginx on firewall
 sudo ufw allow 'Nginx HTTP'
 
-# Give the user ownership of website files for easy editing
+# Give the user ownership to website files for easy editing
 sudo chown -R "$USER":"$USER" /var/www/html
 sudo chmod -R 755 /var/www
 
 # Backup default index
 cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bckp
 
-# Create a new index page with "Hello World!"
-echo -e "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html >/dev/null
+# Creating new index
+echo -e "Hello World!" | dd status=none of=/var/www/html/index.nginx-debian.html
 
-# Restart nginx
+# Restarting nginx
 sudo service nginx restart
 
-# Check if Nginx returns a page containing "Holberton School" at its root
-if curl -s localhost | grep -q "Holberton School"; then
-    echo -e "\nNginx returns a page containing 'Holberton School' at its root.\n"
-else
-    echo -e "\nNginx does not return a page containing 'Holberton School' at its root.\n"
-fi
-
+echo -e "\nCompleted. ✅\n"
